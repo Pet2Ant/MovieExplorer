@@ -25,18 +25,19 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewPopMovies"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+
             <TextView
-                android:id="@+id/popSeries"
+                android:id="@+id/topMovies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Popular Series" />
+                android:text="Top Rated Movies" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPopSeries"
-                android:layout_width="match_parent"
+                android:id="@+id/recyclerViewTopMovies"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
@@ -47,7 +48,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewAllMovies"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
