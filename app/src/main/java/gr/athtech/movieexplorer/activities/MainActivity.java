@@ -1,8 +1,10 @@
-package gr.athtech.movieexplorer;
+package gr.athtech.movieexplorer.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import gr.athtech.movieexplorer.R;
 
 public class MainActivity extends AppCompatActivity {
 
