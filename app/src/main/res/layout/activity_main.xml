@@ -17,28 +17,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/popMovies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Popular Movies" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewPopMovies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
-            <TextView
-                android:id="@+id/topMovies"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Top Rated Movies" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewTopMovies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/allMovies"

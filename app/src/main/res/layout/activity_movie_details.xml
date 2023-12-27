@@ -29,9 +29,24 @@
                 tools:layout_editor_absoluteX="0dp">
 
                 <TextView
-                    android:id="@+id/etvOverview"
+                    android:id="@+id/tvOverviewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginBottom="5dp"
+
+                    android:paddingLeft="15dp"
+                    android:text="Overview"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvOverview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="25dp"
                     android:text="details" />
 
             </LinearLayout>
@@ -77,8 +92,8 @@
 
             <LinearLayout
                 android:id="@+id/llInfo"
-                android:layout_width="280dp"
-                android:layout_height="match_parent"
+                android:layout_width="221dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,8 +106,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="6dp"
                     android:layout_marginBottom="5dp"
-                    android:paddingStart="3dp"
-                    android:text="TextView"
+                    android:paddingLeft="10dp"
+                    android:text="Movie Title"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -112,7 +127,9 @@
                     android:layout_marginStart="3dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="6dp"
-                    android:maxLines="3" />
+                    android:paddingLeft="10dp"
+                    android:maxLines="3"
+                    android:text="Genres" />
 
                 <TextView
                     android:id="@+id/tvPopularity"
@@ -121,7 +138,9 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="6dp"
-                    android:maxLines="3" />
+                    android:paddingLeft="10dp"
+                    android:maxLines="3"
+                    android:text="Popularity" />
 
                 <TextView
                     android:id="@+id/tvReleaseDate"
@@ -130,7 +149,42 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="4dp"
-                    android:maxLines="3" />
+                    android:paddingLeft="10dp"
+                    android:maxLines="3"
+                    android:text="Release Date" />
+
+                <TextView
+                    android:id="@+id/tvBudget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:paddingLeft="10dp"
+                    android:maxLines="3"
+                    android:text="Budget" />
+
+                <TextView
+                    android:id="@+id/tvRuntime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:paddingLeft="10dp"
+                    android:maxLines="3"
+                    android:text="Runtime" />
+
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="4dp"
+                    android:paddingLeft="10dp"
+                    android:maxLines="3"
+                    android:text="Rating" />
 
             </LinearLayout>
 
@@ -153,7 +207,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:paddingStart="15dp"
-                    android:text="Full Casts"
+                    android:text="Cast"
                     android:textSize="16sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -168,19 +222,17 @@
                 </androidx.recyclerview.widget.RecyclerView>
 
 
-
-
                 <TextView
                     android:id="@+id/tvRelated"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:paddingStart="15dp"
-                    android:text="Recommend Contents"
+                    android:text="Recommended Movies"
                     android:textSize="16sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRecommendContents"
+                    android:id="@+id/rvRecommendedMovies"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

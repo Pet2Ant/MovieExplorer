@@ -1,11 +1,13 @@
 package gr.athtech.movieexplorer.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import gr.athtech.movieexplorer.R;
+import gr.athtech.movieexplorer.activities.MovieDetailsActivity;
 import gr.athtech.movieexplorer.data.models.Movie;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
@@ -35,17 +38,28 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MovieViewHolder movieHolder, int position) {
         Movie movie = movies.get(position);
 
         // Set the movie data
-        holder.tvTitle.setText(movie.getTitle());
+        movieHolder.tvTitle.setText(movie.getTitle());
 
         // Load the movie poster
         Glide.with(context)
-                .load("https://image.tmdb.org/t/p/w500/" + movie.getPoster_path())
+                .load(movie.getPoster_path())
                 .placeholder(R.drawable.ic_launcher_background)
-                .into(holder.ivPoster);
+                .into(movieHolder.ivPoster);
+
+        // Set the click listener
+        movieHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click
+                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                intent.putExtra("movie_id", movie.getId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
