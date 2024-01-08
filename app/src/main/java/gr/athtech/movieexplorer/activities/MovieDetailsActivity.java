@@ -1,5 +1,7 @@
 package gr.athtech.movieexplorer.activities;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -7,10 +9,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import gr.athtech.movieexplorer.R;
+import gr.athtech.movieexplorer.adapters.CastAdapter;
 import gr.athtech.movieexplorer.data.appInterface.TMDbApiInterface;
 import gr.athtech.movieexplorer.data.client.TMDbAPIClient;
 import gr.athtech.movieexplorer.data.models.MovieDetails;
@@ -18,10 +23,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends NetworkCheck {
 
-    private ImageView ivHorizontalPoster, ivVerticalPoster;
-    private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating;
+    private NetworkChangeReceiver networkChangeReceiver;
+
+    private ImageView ivHorizontalPoster, ivVerticalPoster, ivProfile;
+    private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating, tvCharacter, tvName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         // Get the movie id from the intent
         int movieId = getIntent().getIntExtra("movie_id", 0);
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.intent.action.NetworkChangeReceiver");
+        Intent intent = new Intent("android.intent.action.NetworkChangeReceiver");
+        intent.putExtra("movie_id", movieId);
+        registerReceiver(networkChangeReceiver, filter, String.valueOf(intent), null);
+
+
         // Call TMDb API to get movie details
         TMDbApiInterface apiInterface = TMDbAPIClient.getClient();
         Call<MovieDetails> movieDetailsCall = apiInterface.getMovieDetails(movieId);
@@ -52,6 +66,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 // Check if the response is successful
                 if (response.isSuccessful()) {
                     MovieDetails movieDetails = response.body();
+                    RecyclerView rvCast = findViewById(R.id.rvCast);
+
+                    rvCast.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    rvCast.setAdapter(new CastAdapter(MovieDetailsActivity.this, movieDetails.getCast()));
                     if (movieDetails != null) {
                         // Set the movie data
                         tvTitle.setText(movieDetails.getTitle());
@@ -94,9 +112,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         } else {
                             tvBudget.setText("Budget: $" + budgetBuilder.toString());
                         }
-
-
-
                         // Load the movie posters
                         Glide.with(MovieDetailsActivity.this)
                                 .load(movieDetails.getPoster_path())
@@ -107,6 +122,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
                                 .load(movieDetails.getBackdrop_path())
                                 .placeholder(R.drawable.ic_launcher_background)
                                 .into(ivHorizontalPoster);
+
+
+
+
                     } else {
                         // Handle the case when the movie details are null
                         Toast.makeText(MovieDetailsActivity.this, "No details", Toast.LENGTH_SHORT).show();
@@ -119,6 +138,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             .setPositiveButton(android.R.string.ok, null)
                             .show();
                 }
+
+
             }
 
             @Override

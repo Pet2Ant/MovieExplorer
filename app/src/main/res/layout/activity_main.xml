@@ -19,6 +19,17 @@
 
 
             <TextView
+                android:id="@+id/favoriteMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your Favorites" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewFavorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
                 android:id="@+id/allMovies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

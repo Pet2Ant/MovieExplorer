@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -8,25 +8,30 @@
         android:id="@+id/ivProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:background="@drawable/round_shape"
         android:clipToOutline="true"
-        android:scaleType="fitXY"
+        android:scaleType="center"
         android:src="@drawable/ic_launcher_background" />
 
     <TextView
         android:id="@+id/tvCharacter"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:gravity="center"
+        android:text="Character"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:gravity="center"
+        android:text="Actor"
+        android:textSize="14sp" />
 
 </LinearLayout>

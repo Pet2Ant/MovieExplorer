@@ -1,9 +1,5 @@
 package gr.athtech.movieexplorer.data.models;
 
-
-//@Setter
-//@Getter
-//@AllArgsConstructor
 public class Movie {
     public int getId() {
         return id;

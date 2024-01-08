@@ -27,6 +27,9 @@ public class MovieDetails {
     public Genres[] getGenres() {
         return genres;
     }
+    public Cast[] getCast() {
+        return cast;
+    }
     public String getBudget() {
         return budget;
     }
@@ -42,6 +45,7 @@ public class MovieDetails {
     private String title;
     private String overview;
     private Genres[] genres;
+    private Cast[] cast;
     private double popularity;
     private String poster_path;
     private String backdrop_path;
@@ -64,5 +68,24 @@ public class MovieDetails {
         public String toString() {
             return name;
         }
+    }
+
+    public static class Cast {
+        public int getId() {
+            return id;
+        }
+        public String getProfile_path() {
+            return profile_path;
+        }
+        public String getCharacter() {
+            return character;
+        }
+        public String getName() {
+            return name;
+        }
+        private int id;
+        private String profile_path;
+        private String character;
+        private String name;
     }
 }

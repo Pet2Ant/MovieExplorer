@@ -19,6 +19,16 @@
             android:layout_height="match_parent">
 
 
+            <ToggleButton
+                android:id="@+id/toggleButtonFavorite"
+                android:layout_width="48dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="208dp"
+                android:layout_marginEnd="141dp"
+                android:text="ToggleButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <LinearLayout
                 android:id="@+id/llOverview"
                 android:layout_width="match_parent"
@@ -64,8 +74,6 @@
                     android:layout_height="200dp"
                     android:scaleType="fitXY" />
             </LinearLayout>
-
-
 
 
             <androidx.cardview.widget.CardView
@@ -127,8 +135,8 @@
                     android:layout_marginStart="3dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="6dp"
-                    android:paddingLeft="10dp"
                     android:maxLines="3"
+                    android:paddingLeft="10dp"
                     android:text="Genres" />
 
                 <TextView
@@ -138,8 +146,8 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="6dp"
-                    android:paddingLeft="10dp"
                     android:maxLines="3"
+                    android:paddingLeft="10dp"
                     android:text="Popularity" />
 
                 <TextView
@@ -149,8 +157,8 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="4dp"
-                    android:paddingLeft="10dp"
                     android:maxLines="3"
+                    android:paddingLeft="10dp"
                     android:text="Release Date" />
 
                 <TextView
@@ -160,8 +168,8 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="4dp"
-                    android:paddingLeft="10dp"
                     android:maxLines="3"
+                    android:paddingLeft="10dp"
                     android:text="Budget" />
 
                 <TextView
@@ -171,8 +179,8 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="4dp"
-                    android:paddingLeft="10dp"
                     android:maxLines="3"
+                    android:paddingLeft="10dp"
                     android:text="Runtime" />
 
                 <TextView
@@ -182,8 +190,8 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="4dp"
-                    android:paddingLeft="10dp"
                     android:maxLines="3"
+                    android:paddingLeft="10dp"
                     android:text="Rating" />
 
             </LinearLayout>
@@ -220,38 +228,7 @@
                     android:layout_marginEnd="5dp">
 
                 </androidx.recyclerview.widget.RecyclerView>
-
-
-                <TextView
-                    android:id="@+id/tvRelated"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:paddingStart="15dp"
-                    android:text="Recommended Movies"
-                    android:textSize="16sp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRecommendedMovies"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-
             </LinearLayout>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.core.widget.NestedScrollView>
-
-
-
-
 </RelativeLayout>
