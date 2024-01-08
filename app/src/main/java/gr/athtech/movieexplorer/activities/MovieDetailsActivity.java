@@ -2,10 +2,14 @@ package gr.athtech.movieexplorer.activities;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +22,7 @@ import gr.athtech.movieexplorer.R;
 import gr.athtech.movieexplorer.adapters.CastAdapter;
 import gr.athtech.movieexplorer.data.appInterface.TMDbApiInterface;
 import gr.athtech.movieexplorer.data.client.TMDbAPIClient;
+import gr.athtech.movieexplorer.data.models.Movie;
 import gr.athtech.movieexplorer.data.models.MovieDetails;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +34,8 @@ public class MovieDetailsActivity extends NetworkCheck {
 
     private ImageView ivHorizontalPoster, ivVerticalPoster, ivProfile;
     private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating, tvCharacter, tvName;
+    private ToggleButton toggleButtonFavorite;
+    private Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class MovieDetailsActivity extends NetworkCheck {
         tvPopularity = findViewById(R.id.tvPopularity);
         tvReleaseDate = findViewById(R.id.tvReleaseDate);
         tvBudget = findViewById(R.id.tvBudget);
+        toggleButtonFavorite = (ToggleButton) findViewById(R.id.toggleButtonFavorite);
 
 
         // Get the movie id from the intent
@@ -123,6 +131,42 @@ public class MovieDetailsActivity extends NetworkCheck {
                                 .placeholder(R.drawable.ic_launcher_background)
                                 .into(ivHorizontalPoster);
 
+                        Movie currentMovie = new Movie(movieDetails.getId(), movieDetails.getTitle(), movieDetails.getPoster_path(), false);
+
+                        if (isFavorite(currentMovie.getId())) {
+                            toggleButtonFavorite.setChecked(true);
+                            toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_on, 0, 0);
+                        } else {
+                            toggleButtonFavorite.setChecked(false);
+                            toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_off, 0, 0);
+                        }
+
+
+                        toggleButtonFavorite.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                boolean isFavorite = !isFavorite(currentMovie.getId());
+                                currentMovie.setIsFavorite(isFavorite);
+                                saveMovieAsFavorite(currentMovie.getId(), isFavorite);
+
+                                toggleButtonFavorite.setChecked(isFavorite);
+
+                                Toast.makeText(MovieDetailsActivity.this, isFavorite ? "Added to Favorites" : "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        toggleButtonFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked) {
+                                    // The toggle is enabled
+                                    toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_on, 0, 0);
+                                } else {
+                                    // The toggle is disabled
+                                    toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_off, 0, 0);
+                                }
+                            }
+                        });
+
 
 
 
@@ -141,6 +185,19 @@ public class MovieDetailsActivity extends NetworkCheck {
 
 
             }
+
+            private boolean isFavorite(int movieId) {
+                SharedPreferences sharedPreferences = getSharedPreferences("favorites", MODE_PRIVATE);
+                return sharedPreferences.getBoolean(String.valueOf(movieId), false);
+            }
+
+            private void saveMovieAsFavorite(int movieId, boolean isFavorite) {
+                SharedPreferences sharedPreferences = getSharedPreferences("favorites", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(String.valueOf(movieId), isFavorite);
+                editor.apply();
+            }
+
 
             @Override
             public void onFailure(Call<MovieDetails> call, Throwable t) {

@@ -1,5 +1,6 @@
 package gr.athtech.movieexplorer.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends NetworkCheck {
-    private RecyclerView recyclerViewAllMovies;
+    private RecyclerView recyclerViewAllMovies, recyclerViewFavorites;
     private TextView allMovies;
 
     @Override
@@ -36,7 +38,10 @@ public class MainActivity extends NetworkCheck {
         allMovies = findViewById(R.id.allMovies);
 
         recyclerViewAllMovies = findViewById(R.id.recyclerViewAllMovies);
+        recyclerViewFavorites = findViewById(R.id.recyclerViewFavorites);
+
         recyclerViewAllMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // Call TMDb API to get all movies
         TMDbApiInterface apiInterface = TMDbAPIClient.getClient();
@@ -46,16 +51,20 @@ public class MainActivity extends NetworkCheck {
             @Override
             public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                 // Check if the response is successful
+                List<Movie> movies = null;
                 if (response.isSuccessful()) {
                     MovieResponse movieResponse = response.body();
                     if (movieResponse != null && movieResponse.getResults() != null) {
-                        List<Movie> movies = Arrays.asList(movieResponse.getResults());
+                        movies = Arrays.asList(movieResponse.getResults());
                         MovieAdapter movieAdapter = new MovieAdapter(movies, MainActivity.this);
                         recyclerViewAllMovies.setAdapter(movieAdapter);
+
+
                     } else {
                         // Handle the case when the movie response is null or has no results
                         Toast.makeText(MainActivity.this, "No results", Toast.LENGTH_SHORT).show();
                     }
+
                 } else {
                     // Handle the case when the response is not successful
                     new AlertDialog.Builder(MainActivity.this)
@@ -63,9 +72,24 @@ public class MainActivity extends NetworkCheck {
                             .setMessage("Error: " + response)
                             .setPositiveButton(android.R.string.ok, null)
                             .show();
-                     recyclerViewAllMovies.setAdapter(null);
+                    recyclerViewAllMovies.setAdapter(null);
                     recyclerViewAllMovies.setVisibility(View.GONE);
                 }
+
+//                render favorites
+                List<Movie> favorites = new ArrayList<>();
+                for (Movie movie : movies) {
+                    if (isFavorite(movie.getId())) {
+                        favorites.add(movie);
+                    }
+                }
+                MovieAdapter movieAdapter = new MovieAdapter(favorites, MainActivity.this);
+                recyclerViewFavorites.setAdapter(movieAdapter);
+            }
+
+            private boolean isFavorite(int movieId) {
+                SharedPreferences sharedPreferences = getSharedPreferences("favorites", MODE_PRIVATE);
+                return sharedPreferences.getBoolean(String.valueOf(movieId), false);
             }
 
             @Override
@@ -74,6 +98,8 @@ public class MainActivity extends NetworkCheck {
                 Toast.makeText(MainActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 recyclerViewAllMovies.setAdapter(null);
                 recyclerViewAllMovies.setVisibility(View.GONE);
+//                call it again
+                moviesCall.clone().enqueue(this);
             }
         });
     }
