@@ -24,6 +24,15 @@
                 android:layout_height="wrap_content"
                 android:text="Your Favorites" />
 
+            <TextView
+                android:id="@+id/noFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="25dp"
+                android:text="No favorites found. Maybe try pressing the star?"
+                android:visibility="gone" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewFavorites"
                 android:layout_width="wrap_content"

@@ -35,7 +35,6 @@ public class MovieDetailsActivity extends NetworkCheck {
     private ImageView ivHorizontalPoster, ivVerticalPoster, ivProfile;
     private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating, tvCharacter, tvName;
     private ToggleButton toggleButtonFavorite;
-    private Movie movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class MovieDetailsActivity extends NetworkCheck {
         registerReceiver(networkChangeReceiver, filter, String.valueOf(intent), null);
 
 
-        // Call TMDb API to get movie details
+        // Call API to get movie details
         TMDbApiInterface apiInterface = TMDbAPIClient.getClient();
         Call<MovieDetails> movieDetailsCall = apiInterface.getMovieDetails(movieId);
 

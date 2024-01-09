@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import gr.athtech.movieexplorer.R;
 import gr.athtech.movieexplorer.adapters.MovieAdapter;
@@ -27,7 +28,7 @@ import retrofit2.Response;
 
 public class MainActivity extends NetworkCheck {
     private RecyclerView recyclerViewAllMovies, recyclerViewFavorites;
-    private TextView allMovies;
+    private TextView allMovies, noFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends NetworkCheck {
 
         // Initialize views
         allMovies = findViewById(R.id.allMovies);
+        noFavorites = findViewById(R.id.noFavorites);
 
         recyclerViewAllMovies = findViewById(R.id.recyclerViewAllMovies);
         recyclerViewFavorites = findViewById(R.id.recyclerViewFavorites);
@@ -76,15 +78,22 @@ public class MainActivity extends NetworkCheck {
                     recyclerViewAllMovies.setVisibility(View.GONE);
                 }
 
-//                render favorites
-                List<Movie> favorites = new ArrayList<>();
+
+                List<Movie> favoriteMovies = new ArrayList<>();
                 for (Movie movie : movies) {
                     if (isFavorite(movie.getId())) {
-                        favorites.add(movie);
+                        favoriteMovies.add(movie);
                     }
                 }
-                MovieAdapter movieAdapter = new MovieAdapter(favorites, MainActivity.this);
+                MovieAdapter movieAdapter = new MovieAdapter(favoriteMovies, MainActivity.this);
                 recyclerViewFavorites.setAdapter(movieAdapter);
+
+                //                        show noFavorites text view if there are no favorites
+                if (favoriteMovies.size() == 0) {
+                    noFavorites.setVisibility(View.VISIBLE);
+                } else {
+                    noFavorites.setVisibility(View.GONE);
+                }
             }
 
             private boolean isFavorite(int movieId) {
