@@ -34,7 +34,7 @@ public class MovieDetailsActivity extends NetworkCheck {
 
     private ImageView ivHorizontalPoster, ivVerticalPoster, ivProfile;
     private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating, tvCharacter, tvName;
-    private ToggleButton toggleButtonFavorite;
+    private ToggleButton toggleButtonFavorite, toggleButtonShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,8 @@ public class MovieDetailsActivity extends NetworkCheck {
         tvPopularity = findViewById(R.id.tvPopularity);
         tvReleaseDate = findViewById(R.id.tvReleaseDate);
         tvBudget = findViewById(R.id.tvBudget);
-        toggleButtonFavorite = (ToggleButton) findViewById(R.id.toggleButtonFavorite);
+        toggleButtonFavorite = findViewById(R.id.toggleButtonFavorite);
+        toggleButtonShare = findViewById(R.id.toggleButtonShare);
 
 
         // Get the movie id from the intent
@@ -140,7 +141,6 @@ public class MovieDetailsActivity extends NetworkCheck {
                             toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_off, 0, 0);
                         }
 
-
                         toggleButtonFavorite.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -165,6 +165,19 @@ public class MovieDetailsActivity extends NetworkCheck {
                                 }
                             }
                         });
+
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this movie: " + movieDetails.getTitle() + "\n" + "https://www.themoviedb.org/movie/" + movieDetails.getId());
+                        shareIntent.setType("text/plain");
+                        toggleButtonShare.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(Intent.createChooser(shareIntent, "Share via"));
+                            }
+                        });
+
+
 
 
 

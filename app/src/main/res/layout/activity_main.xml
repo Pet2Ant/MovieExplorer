@@ -22,7 +22,11 @@
                 android:id="@+id/favoriteMovies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Your Favorites" />
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:text="Your Favorites"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/noFavorites"
@@ -42,7 +46,10 @@
                 android:id="@+id/allMovies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All Movies" />
+                android:paddingStart="15dp"
+                android:text="All Movies"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewAllMovies"
