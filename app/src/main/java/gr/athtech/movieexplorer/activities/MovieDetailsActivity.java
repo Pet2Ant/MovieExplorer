@@ -179,16 +179,20 @@ public class MovieDetailsActivity extends NetworkCheck {
             private void formatRuntime(int runtime) {
                 int hours = runtime / 60;
                 int minutes = runtime % 60;
+                String hourUnit = (hours == 1) ? " hour " : " hours ";
+                String minuteUnit = (minutes == 1) ? " minute" : " minutes";
+
                 if (runtime == 0) {
                     tvRuntime.setText("Runtime: N/A");
                 } else if (hours == 0) {
-                    tvRuntime.setText("Runtime: " + minutes + " minutes");
+                    tvRuntime.setText("Runtime: " + minutes + minuteUnit);
                 } else if (minutes == 0) {
-                    tvRuntime.setText("Runtime: " + hours + " hours");
+                    tvRuntime.setText("Runtime: " + hours + hourUnit);
                 } else {
-                    tvRuntime.setText("Runtime: " + hours + " hours " + minutes + " minutes");
+                    tvRuntime.setText("Runtime: " + hours + hourUnit + minutes + minuteUnit);
                 }
             }
+
 
             private void formatRating(double rating) {
                 DecimalFormat df = new DecimalFormat("#.#");
