@@ -1,5 +1,6 @@
 package gr.athtech.movieexplorer.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DecimalFormat;
+
 import gr.athtech.movieexplorer.R;
 import gr.athtech.movieexplorer.adapters.CastAdapter;
 import gr.athtech.movieexplorer.data.appInterface.TMDbApiInterface;
@@ -29,8 +32,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieDetailsActivity extends NetworkCheck {
-
-    private NetworkChangeReceiver networkChangeReceiver;
 
     private ImageView ivHorizontalPoster, ivVerticalPoster, ivProfile;
     private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating, tvCharacter, tvName;
@@ -52,7 +53,8 @@ public class MovieDetailsActivity extends NetworkCheck {
         tvBudget = findViewById(R.id.tvBudget);
         toggleButtonFavorite = findViewById(R.id.toggleButtonFavorite);
         toggleButtonShare = findViewById(R.id.toggleButtonShare);
-
+        tvRuntime = findViewById(R.id.tvRuntime);
+        tvRating = findViewById(R.id.tvRating);
 
         // Get the movie id from the intent
         int movieId = getIntent().getIntExtra("movie_id", 0);
@@ -61,7 +63,6 @@ public class MovieDetailsActivity extends NetworkCheck {
         filter.addAction("android.intent.action.NetworkChangeReceiver");
         Intent intent = new Intent("android.intent.action.NetworkChangeReceiver");
         intent.putExtra("movie_id", movieId);
-        registerReceiver(networkChangeReceiver, filter, String.valueOf(intent), null);
 
 
         // Call API to get movie details
@@ -78,124 +79,27 @@ public class MovieDetailsActivity extends NetworkCheck {
 
                     rvCast.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
                     rvCast.setAdapter(new CastAdapter(MovieDetailsActivity.this, movieDetails.getCast()));
+
                     if (movieDetails != null) {
-                        // Set the movie data
-                        tvTitle.setText(movieDetails.getTitle());
-                        tvOverview.setText(movieDetails.getOverview());
-                        tvPopularity.setText("Popularity: " + movieDetails.getPopularity());
-                        tvReleaseDate.setText("Release date: " + movieDetails.getRelease_date());
-
-//                        for some reason rating and runtime crash the app when being set to the textview, but work fine when being displayed in an alert dialog wtf?
-//                        tvRating.setText("Rating: " + movieDetails.getVote_average() + "/10");
-//                        tvRuntime.setText("Runtime: " + movieDetails.getRuntime() + " minutes");
-
-                        new AlertDialog.Builder(MovieDetailsActivity.this)
-                                .setTitle("Rating & runtime")
-                                .setMessage("Rating: " + movieDetails.getVote_average() + "\n" + "Runtime: " + movieDetails.getRuntime() + " minutes")
-                                .setPositiveButton(android.R.string.ok, null)
-                                .show();
-
-                        // Format the genres as a string
-                        MovieDetails.Genres[] genres = movieDetails.getGenres();
-                        StringBuilder sb = new StringBuilder();
-                        for (int i = 0; i < genres.length; i++) {
-                            sb.append(genres[i]);
-                            if (i < genres.length - 1) {
-                                sb.append(", ");
-                            }
-                        }
-                        tvGenres.setText("Genres: " + sb.toString());
-
-                        // Format budget as group of 3 digits
-                        String budget = movieDetails.getBudget();
-                        StringBuilder budgetBuilder = new StringBuilder();
-                        for (int i = 0; i < budget.length(); i++) {
-                            budgetBuilder.append(budget.charAt(i));
-                            if ((budget.length() - i) % 3 == 1 && i < budget.length() - 1) {
-                                budgetBuilder.append(",");
-                            }
-                        }
-                        if (budget == null || budget.equals("0")) {
-                            tvBudget.setText("Budget: N/A");
-                        } else {
-                            tvBudget.setText("Budget: $" + budgetBuilder.toString());
-                        }
-                        // Load the movie posters
-                        Glide.with(MovieDetailsActivity.this)
-                                .load(movieDetails.getPoster_path())
-                                .placeholder(R.drawable.ic_launcher_background)
-                                .into(ivVerticalPoster);
-
-                        Glide.with(MovieDetailsActivity.this)
-                                .load(movieDetails.getBackdrop_path())
-                                .placeholder(R.drawable.ic_launcher_background)
-                                .into(ivHorizontalPoster);
 
                         Movie currentMovie = new Movie(movieDetails.getId(), movieDetails.getTitle(), movieDetails.getPoster_path(), false);
 
-                        if (isFavorite(currentMovie.getId())) {
-                            toggleButtonFavorite.setChecked(true);
-                            toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_on, 0, 0);
-                        } else {
-                            toggleButtonFavorite.setChecked(false);
-                            toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_off, 0, 0);
-                        }
-
-                        toggleButtonFavorite.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                boolean isFavorite = !isFavorite(currentMovie.getId());
-                                currentMovie.setIsFavorite(isFavorite);
-                                saveMovieAsFavorite(currentMovie.getId(), isFavorite);
-
-                                toggleButtonFavorite.setChecked(isFavorite);
-
-                                Toast.makeText(MovieDetailsActivity.this, isFavorite ? "Added to Favorites" : "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                        toggleButtonFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                if (isChecked) {
-                                    // The toggle is enabled
-                                    toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_on, 0, 0);
-                                } else {
-                                    // The toggle is disabled
-                                    toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_off, 0, 0);
-                                }
-                            }
-                        });
-
-                        Intent shareIntent = new Intent();
-                        shareIntent.setAction(Intent.ACTION_SEND);
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this movie: " + movieDetails.getTitle() + "\n" + "https://www.themoviedb.org/movie/" + movieDetails.getId());
-                        shareIntent.setType("text/plain");
-                        toggleButtonShare.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                startActivity(Intent.createChooser(shareIntent, "Share via"));
-                            }
-                        });
-
-
-
-
-
+                        formatMovieDetails(movieDetails);
+                        favoriteMovie(currentMovie);
+                        shareMovie(movieDetails);
 
                     } else {
                         // Handle the case when the movie details are null
                         Toast.makeText(MovieDetailsActivity.this, "No details", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    // Handle the case when the response is not successful
-                    new AlertDialog.Builder(MovieDetailsActivity.this)
-                            .setTitle("Error")
-                            .setMessage("Error: " + response)
-                            .setPositiveButton(android.R.string.ok, null)
-                            .show();
-                }
-
-
+                        } else {
+                        // Handle the case when the response is not successful
+                        new AlertDialog.Builder(MovieDetailsActivity.this)
+                                .setTitle("Error")
+                                .setMessage("Error: " + response)
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show();
+                        }
             }
 
             private boolean isFavorite(int movieId) {
@@ -210,6 +114,171 @@ public class MovieDetailsActivity extends NetworkCheck {
                 editor.apply();
             }
 
+            private void favoriteMovie(Movie currentMovie){
+                if (isFavorite(currentMovie.getId())) {
+                    toggleButtonFavorite.setChecked(true);
+                    toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_on, 0, 0);
+                } else {
+                    toggleButtonFavorite.setChecked(false);
+                    toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_off, 0, 0);
+                }
+
+                toggleButtonFavorite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean isFavorite = !isFavorite(currentMovie.getId());
+                        currentMovie.setIsFavorite(isFavorite);
+                        saveMovieAsFavorite(currentMovie.getId(), isFavorite);
+
+                        toggleButtonFavorite.setChecked(isFavorite);
+
+                        Toast.makeText(MovieDetailsActivity.this, isFavorite ? "Added to Favorites" : "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                toggleButtonFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            // The toggle is enabled
+                            toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_on, 0, 0);
+                        } else {
+                            // The toggle is disabled
+                            toggleButtonFavorite.setCompoundDrawablesWithIntrinsicBounds(0, android.R.drawable.star_big_off, 0, 0);
+                        }
+                    }
+                });
+            }
+
+            private void shareMovie(MovieDetails movieDetails){
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this movie: " + movieDetails.getTitle() + "\n" + "https://www.themoviedb.org/movie/" + movieDetails.getId());
+                shareIntent.setType("text/plain");
+                toggleButtonShare.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(Intent.createChooser(shareIntent, "Share via"));
+                    }
+                });
+            }
+            private void formatBudget(String budget) {
+                StringBuilder budgetBuilder = new StringBuilder();
+                for (int i = 0; i < budget.length(); i++) {
+                    budgetBuilder.append(budget.charAt(i));
+                    if ((budget.length() - i) % 3 == 1 && i < budget.length() - 1) {
+                        budgetBuilder.append(",");
+                    }
+                }
+                if (budget == null || budget.equals("0")) {
+                    tvBudget.setText("Budget: N/A");
+                } else {
+                    tvBudget.setText("Budget: $" + budgetBuilder.toString());
+                }
+            }
+
+            private void formatRuntime(int runtime) {
+                int hours = runtime / 60;
+                int minutes = runtime % 60;
+                if (runtime == 0) {
+                    tvRuntime.setText("Runtime: N/A");
+                } else if (hours == 0) {
+                    tvRuntime.setText("Runtime: " + minutes + " minutes");
+                } else if (minutes == 0) {
+                    tvRuntime.setText("Runtime: " + hours + " hours");
+                } else {
+                    tvRuntime.setText("Runtime: " + hours + " hours " + minutes + " minutes");
+                }
+            }
+
+            private void formatRating(double rating) {
+                DecimalFormat df = new DecimalFormat("#.#");
+                String ratingFormatted = df.format(rating);
+                tvRating.setText("Rating: " + ratingFormatted + "/10");
+            }
+
+            private void formatPopularity(double popularity) {
+                DecimalFormat df = new DecimalFormat("#.#");
+                String popularityFormatted = df.format(popularity);
+                tvPopularity.setText("Popularity: " + popularityFormatted);
+            }
+
+            private void formatReleaseDate(String releaseDate) {
+                String[] releaseDateArray = releaseDate.split("-");
+                String year = releaseDateArray[0];
+                String month = releaseDateArray[1];
+                String day = releaseDateArray[2];
+                tvReleaseDate.setText("Release date: " + month + "/" + day + "/" + year);
+            }
+
+            private void formatGenres(MovieDetails.Genres[] genres) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < genres.length; i++) {
+                    sb.append(genres[i]);
+                    if (i < genres.length - 1) {
+                        sb.append(", ");
+                    }
+                }
+                tvGenres.setText("Genres: " + sb.toString());
+            }
+
+            private void formatOverview(String overview) {
+                if (overview == null || overview.equals("")) {
+                    tvOverview.setText("Overview: N/A");
+                } else {
+                    tvOverview.setText("Overview: " + overview);
+                }
+            }
+
+            private void formatTitle(String title) {
+                if (title == null || title.equals("")) {
+                    tvTitle.setText("Title: N/A");
+                } else {
+                    tvTitle.setText("Title: " + title);
+                }
+            }
+
+            private void formatPosterPath(String posterPath) {
+                if (posterPath == null || posterPath.equals("")) {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivVerticalPoster);
+                } else {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(posterPath)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivVerticalPoster);
+                }
+            }
+
+            private void formatBackdropPath(String backdropPath) {
+                if (backdropPath == null || backdropPath.equals("")) {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivHorizontalPoster);
+                } else {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(backdropPath)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivHorizontalPoster);
+                }
+            }
+
+
+            private void formatMovieDetails(MovieDetails movieDetails) {
+                formatTitle(movieDetails.getTitle());
+                formatOverview(movieDetails.getOverview());
+                formatGenres(movieDetails.getGenres());
+                formatPopularity(movieDetails.getPopularity());
+                formatReleaseDate(movieDetails.getRelease_date());
+                formatBudget(movieDetails.getBudget());
+                formatRuntime(movieDetails.getRuntime());
+                formatRating(movieDetails.getVote_average());
+                formatPosterPath(movieDetails.getPoster_path());
+                formatBackdropPath(movieDetails.getBackdrop_path());
+            }
+
 
             @Override
             public void onFailure(Call<MovieDetails> call, Throwable t) {
@@ -218,7 +287,8 @@ new AlertDialog.Builder(MovieDetailsActivity.this)
                         .setTitle("Network Error")
                         .setMessage("Network Error: " + t.getMessage())
                         .setPositiveButton(android.R.string.ok, null)
-                        .show();            }
+                        .show();
+            }
         });
     }
 }

@@ -33,10 +33,10 @@ public class MovieDetails {
     public String getBudget() {
         return budget;
     }
-    public String getRuntime() {
+    public int getRuntime() {
         return runtime;
     }
-    public String getVote_average() {
+    public double getVote_average() {
         return vote_average;
     }
 
@@ -51,8 +51,8 @@ public class MovieDetails {
     private String backdrop_path;
     private String release_date;
     private String budget;
-    private String runtime;
-    private String vote_average;
+    private int runtime;
+    private double vote_average;
 
     public static class Genres {
         public int getId() {
