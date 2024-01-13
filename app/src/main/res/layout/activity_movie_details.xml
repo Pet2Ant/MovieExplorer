@@ -69,7 +69,6 @@
 
                     android:paddingLeft="15dp"
                     android:text="Overview"
-                    android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -137,7 +136,6 @@
                     android:layout_marginBottom="5dp"
                     android:paddingLeft="10dp"
                     android:text="Movie Title"
-                    android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

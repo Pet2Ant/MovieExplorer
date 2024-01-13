@@ -18,6 +18,17 @@
             android:orientation="vertical">
 
 
+            <Button
+                android:id="@+id/randomButton"
+                android:layout_width="62dp"
+                android:layout_height="51dp"
+                android:layout_gravity="right"
+                android:drawableTop="@android:drawable/ic_menu_help"
+                android:textOff=""
+                android:textOn=""
+                android:textSize="0dp"
+                app:iconSize="12dp" />
+
             <TextView
                 android:id="@+id/favoriteMovies"
                 android:layout_width="match_parent"

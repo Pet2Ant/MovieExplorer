@@ -1,8 +1,10 @@
 package gr.athtech.movieexplorer.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ import retrofit2.Response;
 public class MainActivity extends NetworkCheck {
     private RecyclerView recyclerViewAllMovies, recyclerViewPopMovies, recyclerViewFavorites;
     private TextView allMovies, popMovies, noFavorites;
+    private Button randomButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class MainActivity extends NetworkCheck {
         allMovies = findViewById(R.id.allMovies);
         popMovies = findViewById(R.id.popMovies);
         noFavorites = findViewById(R.id.noFavorites);
+        randomButton = findViewById(R.id.randomButton);
+
 
         recyclerViewAllMovies = findViewById(R.id.recyclerViewAllMovies);
         recyclerViewPopMovies = findViewById(R.id.recyclerViewPopMovies);
@@ -79,8 +84,12 @@ public class MainActivity extends NetworkCheck {
                         MovieAdapter movieAdapter = new MovieAdapter(movies, MainActivity.this);
                         recyclerViewAllMovies.setAdapter(movieAdapter);
 
-
-
+                        randomButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getRandomMovie();
+                            }
+                        });
                     } else {
                         // Handle the case when the movie response is null or has no results
                         Toast.makeText(MainActivity.this, "No results", Toast.LENGTH_SHORT).show();
@@ -124,9 +133,41 @@ public class MainActivity extends NetworkCheck {
             }
 
 
+
+
             private boolean isFavorite(int movieId) {
                 SharedPreferences sharedPreferences = getSharedPreferences("favorites", MODE_PRIVATE);
                 return sharedPreferences.getBoolean(String.valueOf(movieId), false);
+            }
+
+            private void getRandomMovie() {
+                final int[] randomMovie = {(int) (Math.random() * 10000)};
+                TMDbApiInterface apiInterface = TMDbAPIClient.getClient();
+                Call<MovieDetails> movieDetailsCall = apiInterface.getMovieDetails(randomMovie[0]);
+                movieDetailsCall.enqueue(new Callback<MovieDetails>() {
+                    @Override
+                    public void onResponse(Call<MovieDetails> call, Response<MovieDetails> response) {
+                        if (response.isSuccessful()) {
+                            MovieDetails movieDetails = response.body();
+                            if (movieDetails != null) {
+                                for (int i : randomMovie) {
+                                    if (i == movieDetails.getId()) {
+                                        Intent intent = new Intent(MainActivity.this, MovieDetailsActivity.class);
+                                        intent.putExtra("movie_id", randomMovie[0]);
+                                        startActivity(intent);
+                                    }
+                                }
+                            }
+                        } else {
+                            getRandomMovie();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MovieDetails> call, Throwable t) {
+                        getRandomMovie();
+                    }
+                });
             }
 
             @Override

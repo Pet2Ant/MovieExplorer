@@ -92,14 +92,14 @@ public class MovieDetailsActivity extends NetworkCheck {
                         // Handle the case when the movie details are null
                         Toast.makeText(MovieDetailsActivity.this, "No details", Toast.LENGTH_SHORT).show();
                     }
-                        } else {
-                        // Handle the case when the response is not successful
-                        new AlertDialog.Builder(MovieDetailsActivity.this)
-                                .setTitle("Error")
-                                .setMessage("Error: " + response)
-                                .setPositiveButton(android.R.string.ok, null)
-                                .show();
-                        }
+                } else {
+                    // Handle the case when the response is not successful
+                    new AlertDialog.Builder(MovieDetailsActivity.this)
+                            .setTitle("Error")
+                            .setMessage("Error: " + response)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show();
+                }
             }
 
             private boolean isFavorite(int movieId) {
@@ -193,14 +193,15 @@ public class MovieDetailsActivity extends NetworkCheck {
                 }
             }
 
-            DecimalFormat df = new DecimalFormat("#.#");
 
             private void formatRating(double rating) {
+                DecimalFormat df = new DecimalFormat("#.#");
                 String ratingFormatted = df.format(rating);
                 tvRating.setText("Rating: " + ratingFormatted + "/10");
             }
 
             private void formatPopularity(double popularity) {
+                DecimalFormat df = new DecimalFormat("#.#");
                 String popularityFormatted = df.format(popularity);
                 tvPopularity.setText("Popularity: " + popularityFormatted);
             }
@@ -210,7 +211,7 @@ public class MovieDetailsActivity extends NetworkCheck {
                 String year = releaseDateArray[0];
                 String month = releaseDateArray[1];
                 String day = releaseDateArray[2];
-                tvReleaseDate.setText("Release date: " + month + "/" + day + "/" + year);
+                tvReleaseDate.setText("Release date: " + day + "/" + month + "/" + year);
             }
 
             private void formatGenres(MovieDetails.Genres[] genres) {
@@ -225,19 +226,47 @@ public class MovieDetailsActivity extends NetworkCheck {
             }
 
             private void formatOverview(String overview) {
-                tvOverview.setText("Overview: " + checkNullOrEmpty(overview));
+                if (overview == null || overview.equals("")) {
+                    tvOverview.setText("N/A");
+                } else {
+                    tvOverview.setText(overview);
+                }
             }
 
             private void formatTitle(String title) {
-                tvTitle.setText("Title: " + checkNullOrEmpty(title));
+                if (title == null || title.equals("")) {
+                    tvTitle.setText("N/A");
+                } else {
+                    tvTitle.setText(title);
+                }
             }
 
             private void formatPosterPath(String posterPath) {
-                loadImage(posterPath, ivVerticalPoster);
+                if (posterPath == null || posterPath.equals("")) {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivVerticalPoster);
+                } else {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(posterPath)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivVerticalPoster);
+                }
             }
 
             private void formatBackdropPath(String backdropPath) {
-                loadImage(backdropPath, ivHorizontalPoster);
+                if (backdropPath == null || backdropPath.equals("")) {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivHorizontalPoster);
+                } else {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(backdropPath)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivHorizontalPoster);
+                }
             }
 
 
@@ -272,10 +301,11 @@ public class MovieDetailsActivity extends NetworkCheck {
                 }
             }
 
+
             @Override
             public void onFailure(Call<MovieDetails> call, Throwable t) {
                 // Handle failure
-new AlertDialog.Builder(MovieDetailsActivity.this)
+                new AlertDialog.Builder(MovieDetailsActivity.this)
                         .setTitle("Network Error")
                         .setMessage("Network Error: " + t.getMessage())
                         .setPositiveButton(android.R.string.ok, null)
