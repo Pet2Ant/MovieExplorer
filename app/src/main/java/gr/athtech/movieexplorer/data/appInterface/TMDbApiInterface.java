@@ -19,26 +19,4 @@ public interface TMDbApiInterface {
     Call<MovieDetails> getMovieDetails(
             @Path("movie_id") int movieId
     );
-
-    //    get popular movies
-//    @GET("movie/popular")
-//    Call<MovieResponse> getPopularMovies(
-//            @Query("api_key") String apiKey,
-//            @Query("page") int page
-//    );
-
-//    get Top rated movies
-
-//    @GET("movie/top_rated")
-//    Call<MovieResponse> getTopRatedMovies(
-//            @Query("api_key") String apiKey,
-//            @Query("page") int page
-//    );
-
-    //    get cast
-//    @GET("movie/{movie_id}/credits")
-//    Call<CastResponse> getCastDetail(
-//            @Path("movie_id") int movie_id,
-//            @Query("api_key") String api_key
-//    );
 }

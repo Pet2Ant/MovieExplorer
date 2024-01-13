@@ -27,13 +27,6 @@
         <activity
             android:name=".activities.MovieDetailsActivity"
             android:exported="true" />
-
-        <receiver android:name=".activities.NetworkChangeReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
     </application>
 
 

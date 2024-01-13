@@ -21,10 +21,15 @@ public class Movie {
         isFavorite = favorite;
         return isFavorite;
     }
+    public double getVote_average() {
+        return vote_average;
+    }
+
 
     private int id;
     private String title;
     private String poster_path;
+    private double vote_average;
     private static boolean isFavorite;
 
 

@@ -193,15 +193,14 @@ public class MovieDetailsActivity extends NetworkCheck {
                 }
             }
 
+            DecimalFormat df = new DecimalFormat("#.#");
 
             private void formatRating(double rating) {
-                DecimalFormat df = new DecimalFormat("#.#");
                 String ratingFormatted = df.format(rating);
                 tvRating.setText("Rating: " + ratingFormatted + "/10");
             }
 
             private void formatPopularity(double popularity) {
-                DecimalFormat df = new DecimalFormat("#.#");
                 String popularityFormatted = df.format(popularity);
                 tvPopularity.setText("Popularity: " + popularityFormatted);
             }
@@ -226,47 +225,19 @@ public class MovieDetailsActivity extends NetworkCheck {
             }
 
             private void formatOverview(String overview) {
-                if (overview == null || overview.equals("")) {
-                    tvOverview.setText("Overview: N/A");
-                } else {
-                    tvOverview.setText("Overview: " + overview);
-                }
+                tvOverview.setText("Overview: " + checkNullOrEmpty(overview));
             }
 
             private void formatTitle(String title) {
-                if (title == null || title.equals("")) {
-                    tvTitle.setText("Title: N/A");
-                } else {
-                    tvTitle.setText("Title: " + title);
-                }
+                tvTitle.setText("Title: " + checkNullOrEmpty(title));
             }
 
             private void formatPosterPath(String posterPath) {
-                if (posterPath == null || posterPath.equals("")) {
-                    Glide.with(MovieDetailsActivity.this)
-                            .load(R.drawable.ic_launcher_background)
-                            .placeholder(R.drawable.ic_launcher_background)
-                            .into(ivVerticalPoster);
-                } else {
-                    Glide.with(MovieDetailsActivity.this)
-                            .load(posterPath)
-                            .placeholder(R.drawable.ic_launcher_background)
-                            .into(ivVerticalPoster);
-                }
+                loadImage(posterPath, ivVerticalPoster);
             }
 
             private void formatBackdropPath(String backdropPath) {
-                if (backdropPath == null || backdropPath.equals("")) {
-                    Glide.with(MovieDetailsActivity.this)
-                            .load(R.drawable.ic_launcher_background)
-                            .placeholder(R.drawable.ic_launcher_background)
-                            .into(ivHorizontalPoster);
-                } else {
-                    Glide.with(MovieDetailsActivity.this)
-                            .load(backdropPath)
-                            .placeholder(R.drawable.ic_launcher_background)
-                            .into(ivHorizontalPoster);
-                }
+                loadImage(backdropPath, ivHorizontalPoster);
             }
 
 
@@ -283,6 +254,23 @@ public class MovieDetailsActivity extends NetworkCheck {
                 formatBackdropPath(movieDetails.getBackdrop_path());
             }
 
+            private String checkNullOrEmpty(String str) {
+                return (str == null || str.equals("")) ? "N/A" : str;
+            }
+
+            private void loadImage(String path, ImageView imageView) {
+                if (checkNullOrEmpty(path).equals("N/A")) {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(imageView);
+                } else {
+                    Glide.with(MovieDetailsActivity.this)
+                            .load(path)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(imageView);
+                }
+            }
 
             @Override
             public void onFailure(Call<MovieDetails> call, Throwable t) {
