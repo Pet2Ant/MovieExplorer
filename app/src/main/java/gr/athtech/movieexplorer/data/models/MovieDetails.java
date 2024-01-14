@@ -30,6 +30,9 @@ public class MovieDetails {
     public Cast[] getCast() {
         return cast;
     }
+    public Crew[] getCrew() {
+        return crew;
+    }
     public String getBudget() {
         return budget;
     }
@@ -40,12 +43,15 @@ public class MovieDetails {
         return vote_average;
     }
 
-
+    public void setId(int id) {
+        this.id = id;
+    }
     private int id;
     private String title;
     private String overview;
     private Genres[] genres;
     private Cast[] cast;
+    private Crew[] crew;
     private double popularity;
     private String poster_path;
     private String backdrop_path;
@@ -86,6 +92,29 @@ public class MovieDetails {
         private int id;
         private String profile_path;
         private String character;
+        private String name;
+    }
+
+    public static class Crew {
+        public int getId() {
+            return id;
+        }
+        public String getProfile_path() {
+            return profile_path;
+        }
+        public String getJob() {
+            return job;
+        }
+        public String getDepartment() {
+            return department;
+        }
+        public String getName() {
+            return name;
+        }
+        private int id;
+        private String profile_path;
+        private String job;
+        private String department;
         private String name;
     }
 }

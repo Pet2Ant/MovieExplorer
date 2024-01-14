@@ -47,7 +47,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         // Load the movie poster
         Glide.with(context)
                 .load(movie.getPoster_path())
-                .placeholder(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.placeholder)
                 .into(movieHolder.ivPoster);
 
         // Set the click listener

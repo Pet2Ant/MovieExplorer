@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 
 import gr.athtech.movieexplorer.R;
 import gr.athtech.movieexplorer.adapters.CastAdapter;
+import gr.athtech.movieexplorer.adapters.CrewAdapter;
 import gr.athtech.movieexplorer.data.appInterface.TMDbApiInterface;
 import gr.athtech.movieexplorer.data.client.TMDbAPIClient;
 import gr.athtech.movieexplorer.data.models.Movie;
@@ -59,12 +60,6 @@ public class MovieDetailsActivity extends NetworkCheck {
         // Get the movie id from the intent
         int movieId = getIntent().getIntExtra("movie_id", 0);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.intent.action.NetworkChangeReceiver");
-        Intent intent = new Intent("android.intent.action.NetworkChangeReceiver");
-        intent.putExtra("movie_id", movieId);
-
-
         // Call API to get movie details
         TMDbApiInterface apiInterface = TMDbAPIClient.getClient();
         Call<MovieDetails> movieDetailsCall = apiInterface.getMovieDetails(movieId);
@@ -76,13 +71,18 @@ public class MovieDetailsActivity extends NetworkCheck {
                 if (response.isSuccessful()) {
                     MovieDetails movieDetails = response.body();
                     RecyclerView rvCast = findViewById(R.id.rvCast);
+                    RecyclerView rvCrew = findViewById(R.id.rvCrew);
 
                     rvCast.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
                     rvCast.setAdapter(new CastAdapter(MovieDetailsActivity.this, movieDetails.getCast()));
 
+                    rvCrew.setLayoutManager(new LinearLayoutManager(MovieDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    rvCrew.setAdapter(new CrewAdapter(MovieDetailsActivity.this, movieDetails.getCrew()));
+
                     if (movieDetails != null) {
 
                         Movie currentMovie = new Movie(movieDetails.getId(), movieDetails.getTitle(), movieDetails.getPoster_path(), false);
+
 
                         formatMovieDetails(movieDetails);
                         favoriteMovie(currentMovie);
@@ -244,13 +244,12 @@ public class MovieDetailsActivity extends NetworkCheck {
             private void formatPosterPath(String posterPath) {
                 if (posterPath == null || posterPath.equals("")) {
                     Glide.with(MovieDetailsActivity.this)
-                            .load(R.drawable.ic_launcher_background)
-                            .placeholder(R.drawable.ic_launcher_background)
+                            .load(R.drawable.placeholder)
                             .into(ivVerticalPoster);
                 } else {
                     Glide.with(MovieDetailsActivity.this)
                             .load(posterPath)
-                            .placeholder(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.placeholder)
                             .into(ivVerticalPoster);
                 }
             }
@@ -258,13 +257,12 @@ public class MovieDetailsActivity extends NetworkCheck {
             private void formatBackdropPath(String backdropPath) {
                 if (backdropPath == null || backdropPath.equals("")) {
                     Glide.with(MovieDetailsActivity.this)
-                            .load(R.drawable.ic_launcher_background)
-                            .placeholder(R.drawable.ic_launcher_background)
+                            .load(R.drawable.placeholder)
                             .into(ivHorizontalPoster);
                 } else {
                     Glide.with(MovieDetailsActivity.this)
                             .load(backdropPath)
-                            .placeholder(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.placeholder)
                             .into(ivHorizontalPoster);
                 }
             }
@@ -290,13 +288,12 @@ public class MovieDetailsActivity extends NetworkCheck {
             private void loadImage(String path, ImageView imageView) {
                 if (checkNullOrEmpty(path).equals("N/A")) {
                     Glide.with(MovieDetailsActivity.this)
-                            .load(R.drawable.ic_launcher_background)
-                            .placeholder(R.drawable.ic_launcher_background)
+                            .load(R.drawable.placeholder)
                             .into(imageView);
                 } else {
                     Glide.with(MovieDetailsActivity.this)
                             .load(path)
-                            .placeholder(R.drawable.ic_launcher_background)
+                            .placeholder(R.drawable.placeholder)
                             .into(imageView);
                 }
             }

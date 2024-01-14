@@ -20,6 +20,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
     private final Context context;
     private final MovieDetails.Cast[] cast;
 
+
     public CastAdapter(Context context, MovieDetails.Cast[] cast) {
         this.context = context;
         this.cast = cast;
