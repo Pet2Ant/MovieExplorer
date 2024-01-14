@@ -1,5 +1,6 @@
 package gr.athtech.movieexplorer.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -81,6 +83,17 @@ public class MainActivity extends NetworkCheck {
     }
 
     private void fetchMovies() {
+        //    deletes memory cache after a 50MB limit is reached
+        Context context = getApplicationContext();
+        File cacheDir = context.getCacheDir();
+        long size = getFolderSize(cacheDir);
+
+        long limit = 50 * 1024 * 1024;
+        if (size > limit) {
+            deleteDir(cacheDir);
+        }
+
+
         // Call API to get all movies
         TMDbApiInterface apiInterface = TMDbAPIClient.getClient();
         Call<MovieResponse> moviesCall = apiInterface.getMovies();
@@ -235,6 +248,7 @@ public class MainActivity extends NetworkCheck {
                 });
             }
 
+
             @Override
             public void onFailure(Call<MovieResponse> call, Throwable t) {
                 // Handle failure
@@ -244,6 +258,31 @@ public class MainActivity extends NetworkCheck {
 
             }
         });
+
+    }
+    public static long getFolderSize(File dir) {
+        long size = 0;
+        for (File file : dir.listFiles()) {
+            if (file.isFile()) {
+                size += file.length();
+            }
+            else
+                size += getFolderSize(file);
+        }
+        return size;
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
     }
 
 }
