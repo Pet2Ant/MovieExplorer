@@ -1,8 +1,6 @@
 package gr.athtech.movieexplorer.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,8 +31,8 @@ import retrofit2.Response;
 
 public class MovieDetailsActivity extends NetworkCheck {
 
-    private ImageView ivHorizontalPoster, ivVerticalPoster, ivProfile;
-    private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating, tvCharacter, tvName;
+    private ImageView ivHorizontalPoster, ivVerticalPoster, ivProfile, iv_goBack;
+    private TextView tvTitle, tvOverview, tvGenres, tvPopularity, tvReleaseDate, tvBudget, tvRuntime, tvRating, tvCharacter, tvName, toolbarTitle;
     private ToggleButton toggleButtonFavorite, toggleButtonShare;
 
     @Override
@@ -43,9 +40,14 @@ public class MovieDetailsActivity extends NetworkCheck {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+
+
+
+
         // Initialize views
         ivHorizontalPoster = findViewById(R.id.ivHorizontalPoster);
         ivVerticalPoster = findViewById(R.id.ivVerticalPoster);
+        iv_goBack = findViewById(R.id.iv_goBack);
         tvTitle = findViewById(R.id.tvTitle);
         tvOverview = findViewById(R.id.tvOverview);
         tvGenres = findViewById(R.id.tvGenres);
@@ -56,6 +58,16 @@ public class MovieDetailsActivity extends NetworkCheck {
         toggleButtonShare = findViewById(R.id.toggleButtonShare);
         tvRuntime = findViewById(R.id.tvRuntime);
         tvRating = findViewById(R.id.tvRating);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
+
+
+//      Go back to previous activity
+        iv_goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         // Get the movie id from the intent
         int movieId = getIntent().getIntExtra("movie_id", 0);
@@ -82,7 +94,6 @@ public class MovieDetailsActivity extends NetworkCheck {
                     if (movieDetails != null) {
 
                         Movie currentMovie = new Movie(movieDetails.getId(), movieDetails.getTitle(), movieDetails.getPoster_path(), false);
-
 
                         formatMovieDetails(movieDetails);
                         favoriteMovie(currentMovie);
@@ -279,6 +290,7 @@ public class MovieDetailsActivity extends NetworkCheck {
                 formatRating(movieDetails.getVote_average());
                 formatPosterPath(movieDetails.getPoster_path());
                 formatBackdropPath(movieDetails.getBackdrop_path());
+                toolbarTitle.setText(movieDetails.getTitle());
             }
 
             private String checkNullOrEmpty(String str) {

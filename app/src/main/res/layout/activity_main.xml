@@ -29,28 +29,41 @@
                     android:orientation="vertical">
 
 
-                    <Button
-                        android:id="@+id/randomButton"
-                        android:layout_width="62dp"
-                        android:layout_height="51dp"
-                        android:layout_gravity="right"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        android:drawableTop="@android:drawable/ic_menu_help"
-                        android:textOff=""
-                        android:textOn=""
-                        android:textSize="0dp"
-                        app:iconSize="12dp" />
 
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="129dp"
+                            android:src="@drawable/banner" />
+
+                        <Button
+                            android:id="@+id/randomButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginHorizontal="15dp"
+                            android:padding="10dp"
+                            android:text="Get Random Movie" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                     <TextView
                         android:id="@+id/favoriteMovies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginHorizontal="15dp"
+                        android:padding="10dp"
+                        android:background="@drawable/rounded_background"
                         android:paddingStart="15dp"
-                        android:paddingTop="15dp"
                         android:text="Your Favorites"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
 
                     <TextView
                         android:id="@+id/noFavorites"
@@ -65,11 +78,21 @@
                         android:id="@+id/recyclerViewFavorites"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/topRatedMovies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginHorizontal="15dp"
+                        android:padding="10dp"
+                        android:background="@drawable/rounded_background"
                         android:paddingStart="15dp"
                         android:text="Top Movies"
                         android:textSize="18sp"
@@ -80,26 +103,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/popMovies"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginHorizontal="15dp"
+                        android:padding="10dp"
+                        android:background="@drawable/rounded_background"
                         android:paddingStart="15dp"
                         android:text="Popular Movies"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerViewAllMovies"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/allMovies"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="15dp"
-                        android:text="All Movies"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -107,6 +127,32 @@
                         android:id="@+id/recyclerViewPopularMovies"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/allMovies"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginHorizontal="15dp"
+                        android:padding="10dp"
+                        android:background="@drawable/rounded_background"
+                        android:paddingStart="15dp"
+                        android:text="All Movies"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewAllMovies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 </LinearLayout>
 

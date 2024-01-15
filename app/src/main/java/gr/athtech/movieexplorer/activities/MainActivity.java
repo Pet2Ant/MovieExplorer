@@ -2,7 +2,6 @@ package gr.athtech.movieexplorer.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +38,6 @@ public class MainActivity extends NetworkCheck {
     private RecyclerView recyclerViewAllMovies, recyclerViewtopMovies, recyclerViewFavorites, getRecyclerViewPopularMovies;
     private TextView allMovies, topMovies, noFavorites, popularMovies;
     private Button randomButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +83,7 @@ public class MainActivity extends NetworkCheck {
     }
 
     private void fetchMovies() {
-        //    deletes memory cache after a 50MB limit is reached
+        //    deletes memory cache after a limit is reached
         Context context = getApplicationContext();
         File cacheDir = context.getCacheDir();
         long size = getFolderSize(cacheDir);

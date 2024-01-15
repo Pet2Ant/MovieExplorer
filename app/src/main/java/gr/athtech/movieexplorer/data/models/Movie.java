@@ -21,9 +21,8 @@ public class Movie {
     public String getPoster_path() {
         return poster_path;
     }
-    public boolean setIsFavorite(boolean favorite) {
+    public void setIsFavorite(boolean favorite) {
         isFavorite = favorite;
-        return isFavorite;
     }
     public double getVote_average() {
         return vote_average;
