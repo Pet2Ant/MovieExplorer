@@ -19,6 +19,17 @@
             android:layout_height="match_parent">
 
 
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,11 +74,12 @@
                     android:id="@+id/tvOverviewTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="6dp"
-                    android:layout_marginBottom="5dp"
-
-                    android:paddingLeft="15dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/rounded_background"
+                    android:padding="10dp"
+                    android:paddingStart="15dp"
+                    android:paddingBottom="20dp"
                     android:text="Overview"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -76,8 +88,8 @@
                     android:id="@+id/tvOverview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="25dp"
-                    android:text="details" />
+                    android:paddingTop="10dp"
+                    android:paddingHorizontal="25dp" />
 
             </LinearLayout>
 
@@ -115,9 +127,9 @@
 
                 <ImageView
                     android:id="@+id/ivHorizontalPoster"
-                    android:layout_width="match_parent"
-                    android:layout_height="228dp"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop"
+                    android:layout_width="fill_parent"
+                    android:layout_height="228dp" />
             </LinearLayout>
 
 
@@ -227,16 +239,37 @@
                     android:paddingLeft="10dp"
                     android:text="Runtime" />
 
-                <TextView
-                    android:id="@+id/tvRating"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="4dp"
-                    android:maxLines="3"
-                    android:paddingLeft="10dp"
-                    android:text="Rating" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="4dp"
+                        android:gravity="center"
+                        android:maxLines="3"
+                        android:paddingLeft="10dp"
+                        android:text="Rating:" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:isIndicator="true"
+                        android:numStars="10"
+                        android:paddingTop="6dp"
+                        android:scaleX="1"
+                        android:scaleY="1"
+                        android:stepSize="1.0" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -256,10 +289,15 @@
                     android:id="@+id/tvCast"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
                     android:layout_marginTop="15dp"
+                    android:background="@drawable/rounded_background"
+                    android:padding="10dp"
                     android:paddingStart="15dp"
                     android:text="Cast"
-                    android:textSize="16sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCast"
@@ -288,10 +326,15 @@
                     android:id="@+id/tvCrew"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
                     android:layout_marginTop="15dp"
+                    android:background="@drawable/rounded_background"
+                    android:padding="10dp"
                     android:paddingStart="15dp"
                     android:text="Crew"
-                    android:textSize="16sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCrew"

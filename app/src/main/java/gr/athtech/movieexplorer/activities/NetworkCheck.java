@@ -12,12 +12,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 public abstract class NetworkCheck extends AppCompatActivity {
 
     private boolean wasDisconnected = false;
 
-    private BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver networkChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (isNetworkConnected()) {
@@ -26,7 +27,7 @@ public abstract class NetworkCheck extends AppCompatActivity {
                     // Get the current activity
                     ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
                     List<ActivityManager.AppTask> taskInfo = am.getAppTasks();
-                    String currentActivity = taskInfo.get(0).getTaskInfo().topActivity.getClassName();
+                    String currentActivity = Objects.requireNonNull(taskInfo.get(0).getTaskInfo().topActivity).getClassName();
                     if (currentActivity.equals("gr.athtech.movieexplorer.activities.MainActivity")) {
                         // If MainActivity is on the screen, refresh it
                         Intent i = new Intent(context, MainActivity.class);

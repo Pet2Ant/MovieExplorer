@@ -26,6 +26,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastViewHolder
         this.cast = cast;
     }
 
+    @NonNull
     @Override
     public CastViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_cast, parent, false);

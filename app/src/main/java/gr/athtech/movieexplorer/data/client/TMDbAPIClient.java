@@ -1,5 +1,7 @@
 package gr.athtech.movieexplorer.data.client;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 
 import gr.athtech.movieexplorer.data.appInterface.TMDbApiInterface;
@@ -19,8 +21,9 @@ public class TMDbAPIClient {
         if (apiInterface == null) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new Interceptor() {
+                        @NonNull
                         @Override
-                        public Response intercept(Chain chain) throws IOException {
+                        public Response intercept(@NonNull Chain chain) throws IOException {
                             Request originalRequest = chain.request();
 
                             Request.Builder builder = originalRequest.newBuilder()

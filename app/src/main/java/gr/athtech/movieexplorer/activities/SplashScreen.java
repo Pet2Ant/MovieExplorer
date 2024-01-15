@@ -20,8 +20,6 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Load the ImageView that will host the animation and
-        // set its animation
         ImageView splashImage = findViewById(R.id.splashImage);
         Animation myFadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
         splashImage.startAnimation(myFadeInAnimation);
@@ -29,8 +27,6 @@ public class SplashScreen extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
                 Intent i = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(i);
 
